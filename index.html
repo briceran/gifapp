@@ -30,6 +30,9 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+
     <script type="text/javascript">
       $(document).ready( function() {
 
@@ -43,7 +46,7 @@
           //create buttons for each element of array
           for (var i = 0; i < list.length; i++) {
             var queryURL = "http://api.giphy.com/v1/gifs/search?q=" +
-              list[i] + "&api_key=dc6zaTOxFJmzC&limit=1";
+              list[i] + "&api_key=dc6zaTOxFJmzC&limit=3";
               var buttonDiv = $("<button>");
               buttonDiv.text(list[i]);
               buttonDiv.addClass("gifbutton");
@@ -55,16 +58,6 @@
         }
 
 
-        $(".gif").on("click", function() {
-          console.log(this);
-          // STEP TWO: make a variable named state and then store the image's data-state into it.
-          // Use the .attr() method for this.
-
-          var state = $(this).attr("data-state");
-          console.log(state);
-
-
-        });
 
         $("#submitBtn").on("click", function() {
 
@@ -72,16 +65,11 @@
           var newList = topics;
           newList.push(newTopic);
           console.log(newList);
-          createButtons(newList);
-
+          //createButtons(newList); //doesnt work
+            //maybe use setTimeinterval ()
+            // with function that creates buttons
 
         });
-
-
-
-
-
-
 
         //main
         createButtons(topics);
@@ -136,23 +124,21 @@
                     $(this).attr("data-state","still");
                     $(this).attr("src",still);
 
-
                   }
 
 
                 });
 
-              }
-            });
+              } //end for loop
+
+            }); //end .done()
 
 
 
-        });
+        }); //end gifButton . onclick
 
 
-
-
-      });
+      }); //end ready
 
 
     </script>
