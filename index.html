@@ -11,15 +11,9 @@
     <div class="container" style="background-color: cyan;">
         <h1 style="color: white;">Selecting GIFs</h1>
         <div id="dock" class="row" style="background-color: white;">
-          <div id="gifs-appear-here">
-          </div>
 
-          <img src="http://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200_s.gif" data-still="http://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200_s.gif" data-animate="http://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200.gif" data-state="still" class="gif">
-          <img src="http://media2.giphy.com/media/8rFQp4kHXJ0gU/200_s.gif" data-still="http://media2.giphy.com/media/8rFQp4kHXJ0gU/200_s.gif" data-animate="http://media2.giphy.com/media/8rFQp4kHXJ0gU/200.gif" data-state="still" class="gif">
-          <img src="http://media3.giphy.com/media/W6LbnBigDe4ZG/200_s.gif" data-still="http://media3.giphy.com/media/W6LbnBigDe4ZG/200_s.gif" data-animate="http://media3.giphy.com/media/W6LbnBigDe4ZG/200.gif" data-state="still" class="gif">
-
-          <button id="articleButton"class="btn btn-responsive btn-danger">Click me!
-          </button>
+        </div>
+        <div id="gifs-appear-here">
         </div>
 
         <form>
@@ -43,17 +37,21 @@
         var topics=["ronnie coleman","butters","wipeout","skateboarding","tweak","towelie","ballin","fail"];
 
         function createButtons(list){
+          var dock = $("#dock");
+
+          dock.empty();
           //create buttons for each element of array
           for (var i = 0; i < list.length; i++) {
             var queryURL = "http://api.giphy.com/v1/gifs/search?q=" +
               list[i] + "&api_key=dc6zaTOxFJmzC&limit=1";
               var buttonDiv = $("<button>");
               buttonDiv.text(list[i]);
+              buttonDiv.addClass("gifbutton");
               buttonDiv.attr("data-url", queryURL);
 
-              var dock = $("#dock");
               dock.append(buttonDiv);
           }
+
         }
 
 
@@ -65,31 +63,34 @@
           var state = $(this).attr("data-state");
           console.log(state);
 
-          // ============== FILL IN CODE HERE FOR STEP TWO =========================
 
-          // CODE GOES HERE
+        });
 
-          // =============================================
+        $("#submitBtn").on("click", function() {
 
-          // STEP THREE: Check if the variable state is equal to 'still',
-          // then update the src attribute of this image to it's data-animate value,
-          // and update the data-state attribute to 'animate'.
-
-          // If state does not equal 'still', then update the src attribute of this
-          // image to it's data-animate value and update the data-state attribute to 'still'
-          // ============== FILL IN CODE HERE FOR STEP THREE =========================
+          var newTopic = $("#newtopic").val();
+          var newList = topics;
+          newList.push(newTopic);
+          console.log(newList);
+          createButtons(newList);
 
 
         });
+
+
+
+
+
 
 
         //main
         createButtons(topics);
 
 
-        $("button").on("click", function() {
 
+        $(".gifbutton").on("click", function() {
 
+          $("#gifs-appear-here").empty();
           var queryURL = $(this).attr("data-url");
           $.ajax({
               url: queryURL,
@@ -107,18 +108,48 @@
 
                 var personImage = $("<img>");
                 personImage.attr("src", results[i].images.fixed_height.url);
+                personImage.attr("data-animate", results[i].images.fixed_height.url);
+                personImage.attr("data-still", results[i].images.fixed_height_still.url);
 
+
+                personImage.attr("data-state", "still");
+
+                personImage.addClass("gifIMG");
                 gifDiv.prepend(p);
                 gifDiv.prepend(personImage);
 
                 $("#gifs-appear-here").prepend(gifDiv);
+
+                $("img").on("click", function() {
+
+
+                  var state = $(this).attr("data-state");
+                  var still = $(this).attr("data-animate");
+                  var animate = $(this).attr("data-still");
+                  if(state==="still"){
+
+                    $(this).attr("data-state","animate");
+                    $(this).attr("src",animate);
+
+                  } else {
+
+                    $(this).attr("data-state","still");
+                    $(this).attr("src",still);
+
+
+                  }
+
+
+                });
+
               }
             });
 
 
-          //console.log($("#newtopic").val());
 
         });
+
+
 
 
       });
